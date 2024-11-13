@@ -66,7 +66,7 @@ class EmployeeController extends Controller
             return response()->json($data, 200);
         } else {
             $data = [
-                'message' => 'Resource employee not found'
+                'message' => 'Employee employee not found'
             ];
             return response()->json($data, 404);  
         }
@@ -119,7 +119,70 @@ class EmployeeController extends Controller
         }
     }
 
-    
+// Untuk search resource
+public function searchResource(Request $request)
+{
+    // Ambil parameter 'name' dari request
+    $name = $request->input('name');
+
+    // Cari resource berdasarkan 'name' menggunakan Eloquent
+    $resources = Employee::where('name', 'like', '%' . $name . '%')
+    ->get(['name', 'gender', 'phone', 'alamat', 'email', 'status', 'hired_on']); // Menampilkan kolom tertentu
+
+    // Cek apakah resource ditemukan
+    if ($resources->isEmpty()) {
+        // Jika tidak ditemukan, kembalikan respons 404
+        return response()->json([
+            'message' => 'Employee not found',
+        ], 404);
+    }
+
+    // Jika ditemukan, kembalikan respons 200 dengan data
+    return response()->json([
+        'message' => 'Get searched resource',
+        'data' => $resources,
+    ], 200);
+}
+
+// Untuk mendapatkan semua resource yang aktif (misalnya `status` bernilai 'active')
+public function getActiveResource(){
+    $activeResources = Employee::where('status', 'active')
+        ->get(['name', 'gender', 'phone', 'alamat', 'email', 'status', 'hired_on']); // Menampilkan kolom tertentu
+
+    // Jika resource aktif ditemukan, kembalikan respons dengan kode 200
+    return response()->json([
+        'message' => 'Get active resource',
+        'total' => $activeResources->count(),
+        'data' => $activeResources,
+    ], 200);
+}
+
+ // Untuk mendapatkan semua resource yang berstatus 'inactive'
+public function getInactiveResource(){
+    $inactiveResources = Employee::where('status', 'inactive')
+        ->get(['name', 'gender', 'phone', 'alamat', 'email', 'status', 'hired_on']); // Menampilkan kolom tertentu
+
+    // Jika resource inactive ditemukan, kembalikan respons dengan kode 200
+    return response()->json([
+        'message' => 'Get inactive resource',
+        'total' => $inactiveResources->count(),
+        'data' => $inactiveResources,
+    ], 200);
+}
+
+// Untuk mendapatkan semua resource yang berstatus 'terminated'
+public function getTerminatedResource(){
+    $terminatedResources = Employee::where('status', 'terminated')
+        ->get(['name', 'gender', 'phone', 'alamat', 'email', 'status', 'hired_on']); // Menampilkan kolom tertentu
+
+    // Jika resource terminated ditemukan, kembalikan respons dengan kode 200
+    return response()->json([
+        'message' => 'Get terminated resource',
+        'total' => $terminatedResources->count(),
+        'data' => $terminatedResources,
+    ], 200);
+}
+
 
 
 }

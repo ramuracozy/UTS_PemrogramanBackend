@@ -17,3 +17,5 @@ Route::get('/employee/search/{name}', [EmployeeController::class, 'search']);
 Route::get('/employee/status/active', [EmployeeController::class, 'active']);
 Route::get('/employee/status/active', [EmployeeController::class, 'inactive']);
 Route::get('/employee/status/terminated', [EmployeeController::class, 'terminated']);
+
+
